@@ -286,6 +286,22 @@
             backdrop-filter: blur(12px);
         }
 
+        .route-map-image-container {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .route-map-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
         .route-title {
             font-size: 1.1rem;
             color: var(--text-muted);
@@ -1777,9 +1793,18 @@
         <div class="route-map-card">
             <div class="route-title">
                 <svg class="icon" style="color: var(--primary)" viewBox="0 0 24 24"><path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
-                Seyahat Rota Akış Şeması
+                Görsel Rota Haritası & Akış Şeması
             </div>
-            <div class="route-svg-container">
+            
+            <div class="route-map-image-container">
+                <img src="route_map.png" alt="Görsel Rota Haritası" class="route-map-image">
+            </div>
+
+            <div style="border-top: 1px solid var(--card-border); padding-top: 15px;">
+                <div class="route-title" style="font-size: 0.95rem; margin-bottom: 10px;">
+                    📌 Doğrusal Akış Şeması (İnteraktif)
+                </div>
+                <div class="route-svg-container">
                 <svg class="route-svg" viewBox="0 0 1000 80">
                     <!-- Lines connecting locations -->
                     <path d="M 50 40 L 950 40" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="4"/>
