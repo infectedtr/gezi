@@ -442,6 +442,30 @@
             transform: translateY(-2px);
         }
 
+        .settle-tab-btn {
+            background: var(--tab-bg);
+            border: 1px solid var(--tab-border);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .settle-tab-btn:hover {
+            background: var(--tab-hover-bg);
+            color: var(--text-main);
+            border-color: var(--tab-hover-border);
+        }
+        .settle-tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--tab-active-text);
+            border-color: transparent;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
         /* Timeline Cards */
         .timeline-day-panel {
             display: none;
@@ -2405,7 +2429,14 @@
                             <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
                             Borç Temizleme & Hesap Kapatma Raporu
                         </div>
-                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 15px;">Bakiyeleri sıfırlamak için yapılması gereken en verimli para transferleri:</p>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 15px;">Bakiyeleri sıfırlamak için yapılması gereken para transferleri:</p>
+                        
+                        <!-- Settlement Tabs -->
+                        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                            <button id="settleTabCurr" class="settle-tab-btn active" onclick="switchSettleTab('curr')">💵 Döviz Cinsinden</button>
+                            <button id="settleTabTL" class="settle-tab-btn" onclick="switchSettleTab('tl')">🇹🇷 Netleşmiş (TL)</button>
+                        </div>
+
                         <div class="settlement-list" id="settlementList">
                             <!-- Injected dynamically -->
                         </div>
@@ -2435,22 +2466,26 @@
                             <span>TRY Karşılığı</span>
                         </div>
                         <div class="budget-amount" id="totalTry">
-                            ₺271.175,51
+                            ₺0.00
                         </div>
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
                         <div class="budget-row">
-                            <span style="color: var(--text-muted)">Türk Lirası (Biletler & Otel)</span>
-                            <span class="budget-val-try">132.889,11 TL</span>
+                            <span style="color: var(--text-muted)">Türk Lirası (TL)</span>
+                            <span class="budget-val-try" id="totalTL">0.00 TL</span>
                         </div>
                         <div class="budget-row">
-                            <span style="color: var(--text-muted)">Euro Cinsinden (Otel & Feribot)</span>
-                            <span class="budget-val-try" style="color: var(--success)">€3.199,12</span>
+                            <span style="color: var(--text-muted)">Euro (EUR)</span>
+                            <span class="budget-val-try" style="color: var(--success)" id="totalEUR">€0.00</span>
                         </div>
                         <div class="budget-row">
-                            <span style="color: var(--text-muted)">İsveç Kronu (Tren & Otel)</span>
-                            <span class="budget-val-try" style="color: var(--accent)">5.224,95 SEK</span>
+                            <span style="color: var(--text-muted)">İsveç Kronu (SEK)</span>
+                            <span class="budget-val-try" style="color: var(--accent)" id="totalSEK">0.00 SEK</span>
+                        </div>
+                        <div class="budget-row">
+                            <span style="color: var(--text-muted)">Norveç Kronu (NOK)</span>
+                            <span class="budget-val-try" style="color: var(--warning)" id="totalNOK">0.00 NOK</span>
                         </div>
                     </div>
 
@@ -2601,6 +2636,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 39213.9
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 39213.9
+                        },
                         "covered_count": 6,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -2623,6 +2663,11 @@
                         "fatih_share_try": 0.0,
                         "payer": "FATİH",
                         "row_paid": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 18143.16
+                        },
+                        "row_paid_original": {
                                 "EKREM": 0.0,
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 18143.16
@@ -2653,6 +2698,11 @@
                                 "GÜLTEKİN": 18607.7432185,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 350.71,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 9,
                         "status": "Onaylı",
                         "risk": "Orta",
@@ -2679,6 +2729,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 90.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 9,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -2701,6 +2756,11 @@
                         "fatih_share_try": 1718.0,
                         "payer": "EKREM",
                         "row_paid": {
+                                "EKREM": 7731.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
                                 "EKREM": 7731.0,
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
@@ -2731,6 +2791,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 6561.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 9,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -2745,16 +2810,21 @@
                         "currency": "EUR",
                         "amount": 267.0,
                         "amount_try": 14166.31245,
-                        "ekrem_share": 165.0,
+                        "ekrem_share": 99.0,
                         "gultekin_share": 102.0,
-                        "fatih_share": 0.0,
-                        "ekrem_share_try": 8754.46275,
+                        "fatih_share": 66.0,
+                        "ekrem_share_try": 5252.67765,
                         "gultekin_share_try": 5411.8497,
-                        "fatih_share_try": 0.0,
-                        "payer": "SPLIT",
+                        "fatih_share_try": 3501.7851,
+                        "payer": "EKREM",
                         "row_paid": {
-                                "EKREM": 8754.46275,
-                                "GÜLTEKİN": 5411.8497,
+                                "EKREM": 14166.31245,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
+                                "EKREM": 267.0,
+                                "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
                         "covered_count": 9,
@@ -2783,6 +2853,11 @@
                                 "GÜLTEKİN": 9338.0936,
                                 "FATİH": 6738.28345
                         },
+                        "row_paid_original": {
+                                "EKREM": 256.0,
+                                "GÜLTEKİN": 176.0,
+                                "FATİH": 127.0
+                        },
                         "covered_count": 9,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -2806,6 +2881,11 @@
                         "payer": "EKREM",
                         "row_paid": {
                                 "EKREM": 16048.566449999998,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
+                                "EKREM": 3321.0,
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
@@ -2835,6 +2915,11 @@
                                 "GÜLTEKİN": 16324.685448,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 307.68,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 9,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -2861,6 +2946,11 @@
                                 "GÜLTEKİN": 9717.4536525,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 183.15,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 5,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -2884,6 +2974,11 @@
                         "payer": "EKREM",
                         "row_paid": {
                                 "EKREM": 5354.547762,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
+                                "EKREM": 100.92,
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
@@ -2913,6 +3008,11 @@
                                 "GÜLTEKİN": 5496.741459999999,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 103.6,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 4,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -2933,11 +3033,16 @@
                         "ekrem_share_try": 4664.271638499999,
                         "gultekin_share_try": 0.0,
                         "fatih_share_try": 5061.67119,
-                        "payer": "SPLIT",
+                        "payer": "EKREM",
                         "row_paid": {
-                                "EKREM": 4664.271638499999,
+                                "EKREM": 9725.9428285,
                                 "GÜLTEKİN": 0.0,
-                                "FATİH": 5061.67119
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
+                                "EKREM": 183.31,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
                         },
                         "covered_count": 5,
                         "status": "Onaylı",
@@ -2962,6 +3067,11 @@
                         "payer": "EKREM",
                         "row_paid": {
                                 "EKREM": 18479.875004999998,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
+                                "EKREM": 348.29999999999995,
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
@@ -2991,6 +3101,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 137.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 3,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -3017,6 +3132,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 5460.4268775
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 1129.95
+                        },
                         "covered_count": 2,
                         "status": "Onaylı",
                         "risk": "Düşük",
@@ -3039,6 +3159,11 @@
                         "fatih_share_try": 0.0,
                         "payer": "GÜLTEKİN",
                         "row_paid": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 8652.03,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
                                 "EKREM": 0.0,
                                 "GÜLTEKİN": 8652.03,
                                 "FATİH": 0.0
@@ -3069,6 +3194,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 385.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 5,
                         "status": "Onaylı",
                         "risk": "Orta",
@@ -3095,6 +3225,11 @@
                                 "GÜLTEKİN": 9664.342794,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 2026.62,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 4,
                         "status": "Onaylı",
                         "risk": "Orta",
@@ -3117,6 +3252,11 @@
                         "fatih_share_try": 11919.56,
                         "payer": "FATİH",
                         "row_paid": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 35758.68
+                        },
+                        "row_paid_original": {
                                 "EKREM": 0.0,
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 35758.68
@@ -3147,10 +3287,77 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 16829.34
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 16829.34
+                        },
                         "covered_count": 3,
                         "status": "Onaylı",
                         "risk": "Orta",
                         "note": "3 kişi yalnız el bagajı"
+                },
+                {
+                        "no": null,
+                        "date": "",
+                        "category": null,
+                        "item": "AFYON ANTALYA GİDİŞ",
+                        "provider": null,
+                        "currency": "TL",
+                        "amount": 2740.0,
+                        "amount_try": 2740.0,
+                        "ekrem_share": 1660.0,
+                        "gultekin_share": 0.0,
+                        "fatih_share": 1080.0,
+                        "ekrem_share_try": 1660.0,
+                        "gultekin_share_try": 0.0,
+                        "fatih_share_try": 1080.0,
+                        "payer": "EKREM",
+                        "row_paid": {
+                                "EKREM": 2740.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
+                                "EKREM": 2740.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "covered_count": 5,
+                        "status": null,
+                        "risk": null,
+                        "note": null
+                },
+                {
+                        "no": null,
+                        "date": "",
+                        "category": null,
+                        "item": "AFYON ANTALYA GİDİŞ",
+                        "provider": null,
+                        "currency": "TL",
+                        "amount": 2160.0,
+                        "amount_try": 2160.0,
+                        "ekrem_share": 0.0,
+                        "gultekin_share": 2160.0,
+                        "fatih_share": 0.0,
+                        "ekrem_share_try": 0.0,
+                        "gultekin_share_try": 2160.0,
+                        "fatih_share_try": 0.0,
+                        "payer": "GÜLTEKİN",
+                        "row_paid": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 2160.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 2160.0,
+                                "FATİH": 0.0
+                        },
+                        "covered_count": 4,
+                        "status": null,
+                        "risk": null,
+                        "note": null
                 },
                 {
                         "no": 23,
@@ -3169,6 +3376,11 @@
                         "fatih_share_try": 0.0,
                         "payer": "SPLIT",
                         "row_paid": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
                                 "EKREM": 0.0,
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
@@ -3199,6 +3411,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 9,
                         "status": "Eksik",
                         "risk": "Orta",
@@ -3221,6 +3438,11 @@
                         "fatih_share_try": 0.0,
                         "payer": "SPLIT",
                         "row_paid": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
+                        "row_paid_original": {
                                 "EKREM": 0.0,
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
@@ -3251,6 +3473,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 9,
                         "status": "Eksik",
                         "risk": "Orta",
@@ -3277,6 +3504,11 @@
                                 "GÜLTEKİN": 0.0,
                                 "FATİH": 0.0
                         },
+                        "row_paid_original": {
+                                "EKREM": 0.0,
+                                "GÜLTEKİN": 0.0,
+                                "FATİH": 0.0
+                        },
                         "covered_count": 9,
                         "status": "Eksik",
                         "risk": "Orta",
@@ -3285,18 +3517,18 @@
         ],
         "summary": {
                 "EKREM": {
-                        "paid": 113647.5034055,
-                        "share": 119423.84734999998,
+                        "paid": 126861.0242955,
+                        "share": 117582.06224999997,
                         "color": "#10b981"
                 },
                 "GÜLTEKİN": {
-                        "paid": 83212.939873,
-                        "share": 124116.1974025,
+                        "paid": 79961.090173,
+                        "share": 126276.1974025,
                         "color": "#ec4899"
                 },
                 "FATİH": {
-                        "paid": 127205.46151749999,
-                        "share": 80525.8600435,
+                        "paid": 122143.7903275,
+                        "share": 85107.64514349999,
                         "color": "#38bdf8"
                 }
         }
@@ -3464,6 +3696,25 @@
         }
 
         // --- Render Budget Table & Settlements Dynamically ---
+        let activeSettleTab = 'curr'; // 'curr' or 'tl'
+        
+        function switchSettleTab(tab) {
+            activeSettleTab = tab;
+            
+            const btnCurr = document.getElementById('settleTabCurr');
+            const btnTL = document.getElementById('settleTabTL');
+            
+            if (tab === 'curr') {
+                btnCurr.classList.add('active');
+                btnTL.classList.remove('active');
+            } else {
+                btnCurr.classList.remove('active');
+                btnTL.classList.add('active');
+            }
+            
+            renderSettlements();
+        }
+
         function renderBudget() {
             if (!budgetData || !budgetData.costs) {
                 console.log("No budgetData available to render.");
@@ -3475,6 +3726,45 @@
             if (totalTryEl && budgetData.summary) {
                 const total = Object.values(budgetData.summary).reduce((acc, p) => acc + p.share, 0);
                 totalTryEl.textContent = '₺' + total.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            }
+
+            // Calculate and render original currency totals
+            let totalTL = 0, totalEUR = 0, totalSEK = 0, totalNOK = 0;
+            budgetData.costs.forEach(c => {
+                const curr = (!c.currency || c.currency === 'None') ? 'TL' : c.currency.trim();
+                const amt = c.amount || 0;
+                if (curr === 'TL') totalTL += amt;
+                else if (curr === 'EUR') totalEUR += amt;
+                else if (curr === 'SEK') totalSEK += amt;
+                else if (curr === 'NOK') totalNOK += amt;
+            });
+
+            const totalTLEl = document.getElementById('totalTL');
+            if (totalTLEl) totalTLEl.textContent = totalTL.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TL';
+            
+            const totalEUREl = document.getElementById('totalEUR');
+            if (totalEUREl) totalEUREl.textContent = '€' + totalEUR.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            const totalSEKEl = document.getElementById('totalSEK');
+            if (totalSEKEl) totalSEKEl.textContent = totalSEK.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' SEK';
+            
+            const totalNOKEl = document.getElementById('totalNOK');
+            if (totalNOKEl) totalNOKEl.textContent = totalNOK.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' NOK';
+
+            // Render passenger/family shares in sidebar
+            if (budgetData.summary) {
+                const gultekinCostEl = document.querySelector('.passenger-row[onclick*="gultekin"] .pass-cost');
+                if (gultekinCostEl) {
+                    gultekinCostEl.textContent = '₺' + budgetData.summary['GÜLTEKİN'].share.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                }
+                const ekremCostEl = document.querySelector('.passenger-row[onclick*="ekrem"] .pass-cost');
+                if (ekremCostEl) {
+                    ekremCostEl.textContent = '₺' + budgetData.summary['EKREM'].share.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                }
+                const fatihCostEl = document.querySelector('.passenger-row[onclick*="fatih"] .pass-cost');
+                if (fatihCostEl) {
+                    fatihCostEl.textContent = '₺' + budgetData.summary['FATİH'].share.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                }
             }
             
             filterBudget();
@@ -3508,7 +3798,7 @@
                 const gultekinShare = c.gultekin_share > 0 ? (c.gultekin_share.toLocaleString('tr-TR') + ' ' + c.currency) : '-';
                 const fatihShare = c.fatih_share > 0 ? (c.fatih_share.toLocaleString('tr-TR') + ' ' + c.currency) : '-';
                 
-                           // Determine payer color based on who paid the expense
+                // Determine payer color based on who paid the expense
                 let payerColor = '';
                 if (c.payer === 'EKREM') {
                     payerColor = 'ekrem';
@@ -3586,74 +3876,195 @@
             
             const summary = budgetData.summary;
             const people = ['EKREM', 'GÜLTEKİN', 'FATİH'];
-            const debtMap = Object.fromEntries(
-                people.map((person) => [person, Object.fromEntries(people.map((other) => [other, 0]))])
-            );
             
-            budgetData.costs.forEach((cost) => {
-                const rowPaid = cost.row_paid || {};
-                const payers = people.filter((person) => (rowPaid[person] || 0) > 0.01);
-                const shares = {
-                    EKREM: cost.ekrem_share_try || 0,
-                    GÜLTEKİN: cost.gultekin_share_try || 0,
-                    FATİH: cost.fatih_share_try || 0
-                };
+            if (activeSettleTab === 'tl') {
+                // Calculate Net TL settlements (all converted to TL first)
+                const debtMap = Object.fromEntries(
+                    people.map((person) => [person, Object.fromEntries(people.map((other) => [other, 0]))])
+                );
+                
+                budgetData.costs.forEach((cost) => {
+                    const rowPaid = cost.row_paid || {};
+                    const payers = people.filter((person) => (rowPaid[person] || 0) > 0.01);
+                    const shares = {
+                        EKREM: cost.ekrem_share_try || 0,
+                        GÜLTEKİN: cost.gultekin_share_try || 0,
+                        FATİH: cost.fatih_share_try || 0
+                    };
 
-                if (payers.length === 1) {
-                    const payer = payers[0];
-                    people.forEach((person) => {
-                        if (person !== payer) {
-                            debtMap[person][payer] += shares[person] || 0;
-                        }
-                    });
-                } else if (payers.length > 1) {
-                    const totalPaid = payers.reduce((sum, person) => sum + (rowPaid[person] || 0), 0);
-                    payers.forEach((payer) => {
-                        const ratio = totalPaid > 0 ? (rowPaid[payer] || 0) / totalPaid : 0;
+                    if (payers.length === 1) {
+                        const payer = payers[0];
                         people.forEach((person) => {
                             if (person !== payer) {
-                                debtMap[person][payer] += (shares[person] || 0) * ratio;
+                                debtMap[person][payer] += shares[person] || 0;
                             }
                         });
-                    });
-                }
-            });
-            
-            const settlements = [];
-            for (let i = 0; i < people.length; i++) {
-                for (let j = 0; j < people.length; j++) {
-                    if (i === j) continue;
-                    const from = people[i];
-                    const to = people[j];
-                    const netAmount = debtMap[from][to] - debtMap[to][from];
-                    if (netAmount > 0.01) {
-                        settlements.push({ from, to, amount: netAmount });
+                    } else if (payers.length > 1) {
+                        const totalPaid = payers.reduce((sum, person) => sum + (rowPaid[person] || 0), 0);
+                        payers.forEach((payer) => {
+                            const ratio = totalPaid > 0 ? (rowPaid[payer] || 0) / totalPaid : 0;
+                            people.forEach((person) => {
+                                if (person !== payer) {
+                                    debtMap[person][payer] += (shares[person] || 0) * ratio;
+                                }
+                            });
+                        });
+                    }
+                });
+                
+                const settlements = [];
+                for (let i = 0; i < people.length; i++) {
+                    for (let j = 0; j < people.length; j++) {
+                        if (i === j) continue;
+                        const from = people[i];
+                        const to = people[j];
+                        const netAmount = debtMap[from][to] - debtMap[to][from];
+                        if (netAmount > 0.01) {
+                            settlements.push({ from, to, amount: netAmount });
+                        }
                     }
                 }
-            }
-            
-            if (settlements.length === 0) {
-                list.innerHTML = `<div class="settlement-item" style="justify-content: center; color: var(--success); font-weight: 600;"> Tüm hesaplar kapatılmıştır, borç bulunmamaktadır.</div>`;
-                return;
-            }
-            
-            settlements.forEach((s) => {
-                const item = document.createElement('div');
-                item.className = 'settlement-item';
                 
-                const fromColor = summary[s.from].color;
-                const toColor = summary[s.to].color;
+                if (settlements.length === 0) {
+                    list.innerHTML = `<div class="settlement-item" style="justify-content: center; color: var(--success); font-weight: 600;"> Tüm hesaplar kapatılmıştır, borç bulunmamaktadır.</div>`;
+                    return;
+                }
                 
-                item.innerHTML = `
-                    <div style="display:flex; align-items:center;">
-                        <span class="settlement-party" style="color: ${fromColor};">${s.from}</span>
-                        <span class="settlement-arrow">➔</span>
-                        <span class="settlement-party" style="color: ${toColor};">${s.to}</span>
-                    </div>
-                    <div class="settlement-val">₺${s.amount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
-                `;
-                list.appendChild(item);
-            });
+                settlements.forEach((s) => {
+                    const item = document.createElement('div');
+                    item.className = 'settlement-item';
+                    
+                    const fromColor = summary[s.from].color;
+                    const toColor = summary[s.to].color;
+                    
+                    item.innerHTML = `
+                        <div style="display:flex; align-items:center;">
+                            <span class="settlement-party" style="color: ${fromColor};">${s.from}</span>
+                            <span class="settlement-arrow">➔</span>
+                            <span class="settlement-party" style="color: ${toColor};">${s.to}</span>
+                        </div>
+                        <div class="settlement-val">₺${s.amount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                    `;
+                    list.appendChild(item);
+                });
+            } else {
+                // Calculate currency-by-currency settlements
+                const currencies = ['TL', 'EUR', 'SEK', 'NOK'];
+                const rates = budgetData.rates || {};
+                const currRates = {
+                    'TL': 1.0,
+                    'EUR': rates.EUR_TL || 53.05735,
+                    'SEK': rates.SEK_TL || 4.83245,
+                    'NOK': rates.NOK_TL || 4.7687
+                };
+                const symbolMap = {
+                    'TL': '₺',
+                    'EUR': '€',
+                    'SEK': ' SEK',
+                    'NOK': ' NOK'
+                };
+                
+                const allSettlements = [];
+                
+                currencies.forEach(curr => {
+                    const balances = {};
+                    people.forEach(p => {
+                        balances[p] = { paid: 0, share: 0 };
+                    });
+                    
+                    budgetData.costs.forEach(cost => {
+                        const c_curr = (!cost.currency || cost.currency === 'None') ? 'TL' : cost.currency.trim();
+                        if (c_curr !== curr) return;
+                        
+                        // Paid
+                        const paidObj = cost.row_paid_original || {};
+                        people.forEach(p => {
+                            balances[p].paid += paidObj[p] || 0;
+                        });
+                        
+                        // Share
+                        balances['EKREM'].share += cost.ekrem_share || 0;
+                        balances['GÜLTEKİN'].share += cost.gultekin_share || 0;
+                        balances['FATİH'].share += cost.fatih_share || 0;
+                    });
+                    
+                    const debtors = [];
+                    const creditors = [];
+                    
+                    people.forEach(p => {
+                        const net = balances[p].paid - balances[p].share;
+                        if (net < -0.01) {
+                            debtors.push({ name: p, amount: -net });
+                        } else if (net > 0.01) {
+                            creditors.push({ name: p, amount: net });
+                        }
+                    });
+                    
+                    let d_idx = 0;
+                    let c_idx = 0;
+                    
+                    while (d_idx < debtors.length && c_idx < creditors.length) {
+                        const debtor = debtors[d_idx];
+                        const creditor = creditors[c_idx];
+                        
+                        const amountToPay = Math.min(debtor.amount, creditor.amount);
+                        if (amountToPay > 0.01) {
+                            allSettlements.push({
+                                from: debtor.name,
+                                to: creditor.name,
+                                amount: amountToPay,
+                                currency: curr
+                            });
+                        }
+                        
+                        debtor.amount -= amountToPay;
+                        creditor.amount -= amountToPay;
+                        
+                        if (debtor.amount < 0.01) d_idx++;
+                        if (creditor.amount < 0.01) c_idx++;
+                    }
+                });
+                
+                if (allSettlements.length === 0) {
+                    list.innerHTML = `<div class="settlement-item" style="justify-content: center; color: var(--success); font-weight: 600;"> Tüm hesaplar kapatılmıştır, borç bulunmamaktadır.</div>`;
+                    return;
+                }
+                
+                allSettlements.forEach((s) => {
+                    const item = document.createElement('div');
+                    item.className = 'settlement-item';
+                    
+                    const fromColor = summary[s.from].color;
+                    const toColor = summary[s.to].color;
+                    
+                    const rate = currRates[s.currency] || 1.0;
+                    const amountTry = s.amount * rate;
+                    
+                    let formattedVal = '';
+                    if (s.currency === 'EUR') {
+                        formattedVal = '€' + s.amount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    } else if (s.currency === 'TL') {
+                        formattedVal = '₺' + s.amount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    } else {
+                        formattedVal = s.amount.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + symbolMap[s.currency];
+                    }
+                    
+                    const trySuffix = s.currency !== 'TL' ? `<div style="font-size: 0.75rem; color: var(--text-muted); text-align: right; margin-top: 2px;">~₺${amountTry.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>` : '';
+                    
+                    item.innerHTML = `
+                        <div style="display:flex; align-items:center;">
+                            <span class="settlement-party" style="color: ${fromColor};">${s.from}</span>
+                            <span class="settlement-arrow">➔</span>
+                            <span class="settlement-party" style="color: ${toColor};">${s.to}</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="settlement-val">${formattedVal}</div>
+                            ${trySuffix}
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+            }
         }
 
         // Overwrite showPassengerDetails to show family details modal since columns are family-based
